@@ -2,29 +2,27 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
-const sprintf = require('sprintf-js').sprintf;
 
 var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
-const zeroPaddedNumber = (num) => {
-  return sprintf('%05d', num);
-};
 
 exports.create = (text, callback) => {
   counter.getNextUniqueId((err, id) => {
     if (err) {
       console.log(err);
     }
-    var counterString = zeroPaddedNumber(id);
-    fs.writeFile(path.join(exports.dataDir, `${counterString}.txt`), text, (err) => {
-      if (err) {
-        throw ('error writing counter');
-      } else {
-        items[id] = text;
-        callback(null, { id, text });
-      }
-    });
+    counter.writeCounter(id, (err, zeroPaddedId) => {
+      if (err) console.log(err);
+      fs.writeFile(path.join(exports.dataDir, `${zeroPaddedId}.txt`), text, (err) => {
+        if (err) {
+          throw ('error writing counter');
+        } else {
+          items[id] = text;
+          callback(null, { id, text });
+        }
+      });
+    }) 
   });
 };
 
@@ -37,18 +35,16 @@ exports.readAll = (callback) => {
       return;
     }
     filenames.forEach((filename) => {
-      var obj = {};
-      obj[filename] = filename;
+      filename = path.basename(filename, '.txt')
+      var obj = {"id": filename, "text": filename};
       dataArr.push(obj);
     });
-    console.log(dataArr);
     callback(null, dataArr);
   });
 
 };
 
 exports.readOne = (id, callback) => {
-  // var text = items[id];
   fs.readFile(path.join(exports.dataDir, `${id}.txt`), (err, text) => {
     if (err) {
       callback(new Error(`No item with id: ${id}`));
@@ -57,11 +53,6 @@ exports.readOne = (id, callback) => {
       callback(null, { id, text });
     }
   });
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
 };
 
 exports.update = (id, text, callback) => {
@@ -78,14 +69,6 @@ exports.update = (id, text, callback) => {
       });
     }
   });
-
-  // var item = items[id];
-  // if (!item) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   items[id] = text;
-  //   callback(null, { id, text });
-  // }
 };
 
 exports.delete = (id, callback) => {
@@ -102,14 +85,6 @@ exports.delete = (id, callback) => {
       });
     }
   });
-  // var item = items[id];
-  // delete items[id];
-  // if (!item) {
-  //   // report an error if item not found
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback();
-  // }
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
