@@ -2,6 +2,8 @@
 // Todo Model //////////////////////////////////////////////////////////////////
 
 const Todo = require('./datastore');
+var Promise = require('bluebird');
+var todoHelper = Promise.promisifyAll(require('./datastore/index'));
 
 // Configure Express ///////////////////////////////////////////////////////////
 
@@ -31,13 +33,20 @@ app.post('/todo', (req, res) => {
 
 // Read all (cRud) -- collection route
 app.get('/todo', (req, res) => {
-  Todo.readAll((err, todos) => {
-    if (err) {
-      res.sendStatus(400);
-    } else {
+  exports.readAllFiles()
+    .then((todos) => {
       res.status(200).json(todos);
-    }
-  });
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    }); 
+  // Todo.readAll((err, todos) => {
+  //   if (err) {
+  //     res.sendStatus(400);
+  //   } else {
+  //     res.status(200).json(todos);
+  //   }
+  // });
 });
 
 // Read one (cRud) -- member route
@@ -72,6 +81,28 @@ app.delete('/todo/:id', (req, res) => {
     }
   });
 });
+
+
+// Promisify fucntion //////////////////////////////////////////////////////////
+
+exports.readAllFiles = () => {
+  return todoHelper.readAllAsync()
+    .then((allTodos) => {
+      var finalArr = [];
+      allTodos.forEach((singleTodo) => {
+        finalArr.push(todoHelper.readOneAsync(singleTodo.id));
+      });
+      return Promise.all(finalArr).then((allTodos) => {
+        return allTodos;
+      });
+    });
+};
+
+
+
+
+
+
 
 // Start & Initialize Web Server ///////////////////////////////////////////////
 

@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
+var Promise = require('bluebird');
 
 var items = {};
 
@@ -13,7 +14,7 @@ exports.create = (text, callback) => {
       console.log(err);
     }
     counter.writeCounter(id, (err, zeroPaddedId) => {
-      if (err) console.log(err);
+      if (err) { console.log(err); }
       fs.writeFile(path.join(exports.dataDir, `${zeroPaddedId}.txt`), text, (err) => {
         if (err) {
           throw ('error writing counter');
@@ -22,7 +23,7 @@ exports.create = (text, callback) => {
           callback(null, { id, text });
         }
       });
-    }) 
+    }); 
   });
 };
 
@@ -35,8 +36,8 @@ exports.readAll = (callback) => {
       return;
     }
     filenames.forEach((filename) => {
-      filename = path.basename(filename, '.txt')
-      var obj = {"id": filename, "text": filename};
+      filename = path.basename(filename, '.txt');
+      var obj = {'id': filename, 'text': filename};
       dataArr.push(obj);
     });
     callback(null, dataArr);
@@ -86,6 +87,8 @@ exports.delete = (id, callback) => {
     }
   });
 };
+
+
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
 

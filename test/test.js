@@ -5,6 +5,8 @@ const path = require('path');
 const counter = require('../datastore/counter.js');
 const todos = require('../datastore/index.js');
 
+const server = require('../server.js');
+
 const initializeTestFiles = () => {
   counter.counterFile = path.join(__dirname, './counterTest.txt');
   todos.dataDir = path.join(__dirname, 'testData');
@@ -119,18 +121,19 @@ describe('todos', () => {
     it('should return an array with all saved todos', (done) => {
       const todo1text = 'todo 1';
       const todo2text = 'todo 2';
-      const expectedTodoList = [{ id: '00001', text: '00001' }, { id: '00002', text: '00002' }];
+      const expectedTodoList = [{ id: '00001', text: todo1text }, { id: '00002', text: todo2text }];
       todos.create(todo1text, (err, todo) => {
         todos.create(todo2text, (err, todo) => {
-          todos.readAll((err, todoList) => {
-            expect(todoList).to.have.lengthOf(2);
-            expect(todoList).to.deep.include.members(expectedTodoList, 'NOTE: Text field should use the Id initially');
-            done();
-          });
+          server.readAllFiles()
+            .then((todos) => {
+              expect(todos).to.have.lengthOf(2);
+              expect(todos).to.deep.include.members(expectedTodoList, 'NOTE: Text field should use the Id initially');
+              done();
+            })
+            .catch(done);
         });
       });
     });
-
   });
 
   describe('readOne', () => {
