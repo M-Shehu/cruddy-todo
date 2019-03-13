@@ -2,6 +2,8 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="styles.css" />
+  <script src="./node_modules/react/dist/react.js"></script>
+  <script src="./node_modules/react-dom/dist/react-dom.js"></script>
   <title>CRUDdy Todo</title>
 </head>
 <body>
@@ -12,10 +14,17 @@
   </div>
   <hr/>
   <ul id="todos"></ul>
+
+  <div id="app"></div>
   
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://fastcdn.org/Underscore.js/1.8.3/underscore-min.js"></script>
   <script src="todo.js"></script>
   <script src="client.js"></script>
+  <script type="module" src="./compiled/public/React/Components/App.js"></script>
+  <script type="module" src="./compiled/public/React/Components/NewTodo.js"></script>
+  <script type="module" src="./compiled/public/React/Components/TodoItem.js"></script>
+  <script type="module" src="./compiled/public/React/Components/TodoListView.js"></script>
+  <script type="module" src="./compiled/public/React/Index.js"></script>
 </body>
 </html>

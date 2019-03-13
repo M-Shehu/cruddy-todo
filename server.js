@@ -40,13 +40,6 @@ app.get('/todo', (req, res) => {
     .catch(() => {
       res.sendStatus(400);
     }); 
-  // Todo.readAll((err, todos) => {
-  //   if (err) {
-  //     res.sendStatus(400);
-  //   } else {
-  //     res.status(200).json(todos);
-  //   }
-  // });
 });
 
 // Read one (cRud) -- member route
