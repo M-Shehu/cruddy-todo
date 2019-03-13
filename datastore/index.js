@@ -78,7 +78,7 @@ exports.update = (id, text, callback) => {
             callback(null, textObj);
           }
         });
-      })
+      });
     }
   });
 };
