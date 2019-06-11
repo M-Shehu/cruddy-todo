@@ -4,7 +4,7 @@ const _ = require('underscore');
 const counter = require('./counter');
 var Promise = require('bluebird');
 
-var items = {};
+
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
@@ -15,12 +15,17 @@ exports.create = (text, callback) => {
     }
     counter.writeCounter(id, (err, zeroPaddedId) => {
       if (err) { console.log(err); }
-      fs.writeFile(path.join(exports.dataDir, `${zeroPaddedId}.txt`), text, (err) => {
+      var items = {};
+      items.id = zeroPaddedId;
+      items.text = text;
+      items.time = new Date().toLocaleTimeString('en-US');
+      items.status = 'created';
+      itemsString = JSON.stringify(items);
+      fs.writeFile(path.join(exports.dataDir, `${zeroPaddedId}.txt`), itemsString, (err) => {
         if (err) {
           throw ('error writing counter');
         } else {
-          items[id] = text;
-          callback(null, { id, text });
+          callback(null, items);
         }
       });
     }); 
@@ -50,8 +55,8 @@ exports.readOne = (id, callback) => {
     if (err) {
       callback(new Error(`No item with id: ${id}`));
     } else {
-      text = text.toString();
-      callback(null, { id, text });
+      textObj = JSON.parse(text);
+      callback(null, textObj);
     }
   });
 };
@@ -61,12 +66,18 @@ exports.update = (id, text, callback) => {
     if (err) {
       callback(new Error(`No item with id: ${id}`));
     } else {
-      fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, (err) => {
-        if (err) {
-          callback(new Error(`No item with id: ${id}`));
-        } else {
-          callback(null, { id, text });
-        }
+      exports.readOne(id, (err, textObj) => {
+        textObj.text = text;
+        textObj.time = new Date().toLocaleTimeString('en-US');
+        textObj.status = 'updated';
+        itemsString = JSON.stringify(textObj);
+        fs.writeFile(path.join(exports.dataDir, `${id}.txt`), itemsString, (err) => {
+          if (err) {
+            callback(new Error(`No item with id: ${id}`));
+          } else {
+            callback(null, textObj);
+          }
+        });
       });
     }
   });

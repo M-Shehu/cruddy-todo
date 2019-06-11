@@ -1,8 +1,116 @@
 body {
   margin : 20px;
-  font-family: arial, sans-serif;
+  font-family: 'Maven Pro', sans-serif;
+  background: #777777;
+  color: rgb(238, 238, 238);
+}
+
+#form {
+  display: flex;
+  justify-content: center;
+}
+
+input {
+  width: 60%;
+  margin: 10px 40px;
 }
 
 .todo {
+  position: relative;
   padding: 3px;
+  height: 40%;
+  margin: auto;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  list-style: none;
+  width: 60%;
+  text-align: center;
+  border-bottom: 1px solid #ffffff;
 }
+
+.button-area {
+  margin-top: 20px;
+  float: right;
+  vertical-align: center;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: white; 
+  color: #777777;
+}
+
+
+#todos {
+  margin-top: 50px;
+}
+
+.todo-text {
+  font-weight: 700;
+  font-size: 35px;
+}
+
+.first-title {
+  display: block;
+  width: 70%;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  height: auto;
+  margin: 80px auto;
+  font-weight: 100;
+  color: white;
+  font-size: 90px;
+}
+
+
+
+
+
+
+
+
+
+
+/*REACT CSS*/
+/* 
+.search-bar {
+  border-radius: 1px;
+  background: #fff;
+}
+
+.search-bar .form-control {
+  border-radius: 2px;
+  width: 80%
+}
+.search-bar .btn {
+  border-radius: 2px;
+  border-color: #d3d3d3;
+  background: #f8f8f8;
+  width: 20%;
+  margin-left: -1px;
+}
+
+.search-bar .btn:hover {
+  border-color: #c6c6c6;
+  background: #f0f0f0;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.10);
+}
+
+.todo-list {
+  background: #fff;
+  padding: 8px;
+  border: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  margin-right: 20px;
+}
+ */
