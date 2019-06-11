@@ -4,7 +4,7 @@
 A simple todo app built in React.
 
 ## Usage
-Run the following command to run the code in development mode. Don't worry, it runs all necessary scripts in this one command.
+Run the following command to run the code in development mode. It runs all necessary scripts in this one command.
 
 ```sh
 npm run start:dev
